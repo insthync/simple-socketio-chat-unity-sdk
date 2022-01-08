@@ -105,5 +105,15 @@ namespace SimpleSocketIOChatSDK
         {
             await client.EmitAsync("group-invite-decline", data);
         }
+
+        public async void SendLeaveGroup(SendLeaveGroupData data)
+        {
+            await client.EmitAsync("leave-group", data);
+        }
+
+        public async void SendKickUser(SendKickUserData data)
+        {
+            await client.EmitAsync("kick-user", data);
+        }
     }
 }
