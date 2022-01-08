@@ -3,7 +3,6 @@ namespace SimpleSocketIOChatSDK
     [System.Serializable]
     public struct SendLocalData
     {
-        public string user_id;
         public string name;
         public string msg;
         public string map;
