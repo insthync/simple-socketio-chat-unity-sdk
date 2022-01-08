@@ -41,6 +41,7 @@ namespace SimpleSocketIOChatSDK
         {
             Disconnect();
             client = new SocketIO(serviceAddress);
+            client.On("local", OnLocal);
             await client.ConnectAsync();
         }
 
@@ -49,6 +50,11 @@ namespace SimpleSocketIOChatSDK
             if (client != null && client.Connected)
                 await client.DisconnectAsync();
             client = null;
+        }
+
+        private void OnLocal(SocketIOResponse resp)
+        {
+            RecvLocalData data = resp.GetValue<RecvLocalData>();
         }
 
         public async void SendValidateUser(SendValidateUser data)
