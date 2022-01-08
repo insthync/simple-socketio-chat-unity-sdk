@@ -60,5 +60,10 @@ namespace SimpleSocketIOChatSDK
         {
             await client.EmitAsync("local", data);
         }
+
+        public async void SendGlobal(SendGlobalData data)
+        {
+            await client.EmitAsync("global", data);
+        }
     }
 }
