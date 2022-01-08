@@ -100,5 +100,10 @@ namespace SimpleSocketIOChatSDK
         {
             await client.EmitAsync("group-invite-accept", data);
         }
+
+        public async void SendGroupInviteDecline(SendGroupInviteDeclineData data)
+        {
+            await client.EmitAsync("group-invite-decline", data);
+        }
     }
 }
