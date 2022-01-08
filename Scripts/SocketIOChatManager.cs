@@ -44,6 +44,7 @@ namespace SimpleSocketIOChatSDK
             client.On("local", OnLocal);
             client.On("global", OnGlobal);
             client.On("whisper", OnWhisper);
+            client.On("group", OnGroup);
             await client.ConnectAsync();
         }
 
@@ -67,6 +68,11 @@ namespace SimpleSocketIOChatSDK
         private void OnWhisper(SocketIOResponse resp)
         {
             RecvWhisperData data = resp.GetValue<RecvWhisperData>();
+        }
+
+        private void OnGroup(SocketIOResponse resp)
+        {
+            RecvGroupData data = resp.GetValue<RecvGroupData>();
         }
 
         public async void SendValidateUser(SendValidateUser data)
