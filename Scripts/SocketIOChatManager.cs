@@ -51,9 +51,14 @@ namespace SimpleSocketIOChatSDK
             client = null;
         }
 
-        public async void ValidateUser(SendValidateUser data)
+        public async void SendValidateUser(SendValidateUser data)
         {
             await client.EmitAsync("validate-user", data);
+        }
+
+        public async void SendLocal(SendLocalData data)
+        {
+            await client.EmitAsync("local", data);
         }
     }
 }
