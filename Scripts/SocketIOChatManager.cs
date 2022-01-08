@@ -46,6 +46,7 @@ namespace SimpleSocketIOChatSDK
             client.On("whisper", OnWhisper);
             client.On("group", OnGroup);
             client.On("create-group", OnCreateGroup);
+            client.On("update-group", OnUpdateGroup);
             await client.ConnectAsync();
         }
 
@@ -79,6 +80,11 @@ namespace SimpleSocketIOChatSDK
         private void OnCreateGroup(SocketIOResponse resp)
         {
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
+        }
+
+        private void OnUpdateGroup(SocketIOResponse resp)
+        {
+            RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
         }
 
         public async void SendValidateUser(SendValidateUser data)
