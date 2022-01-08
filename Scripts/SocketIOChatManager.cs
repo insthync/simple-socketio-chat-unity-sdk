@@ -65,5 +65,15 @@ namespace SimpleSocketIOChatSDK
         {
             await client.EmitAsync("global", data);
         }
+
+        public async void SendWhisper(SendWhisperData data)
+        {
+            await client.EmitAsync("whisper", data);
+        }
+
+        public async void SendGroup(SendGroupData data)
+        {
+            await client.EmitAsync("group", data);
+        }
     }
 }
