@@ -80,5 +80,10 @@ namespace SimpleSocketIOChatSDK
         {
             await client.EmitAsync("create-group", data);
         }
+
+        public async void SendUpdateGroup(SendUpdateGroupData data)
+        {
+            await client.EmitAsync("update-group", data);
+        }
     }
 }
