@@ -91,7 +91,7 @@ namespace SimpleSocketIOChatSDK
             await client.EmitAsync("group-invitation-list");
         }
 
-        public async void SendGroupInvite(SendUpdateGroupData data)
+        public async void SendGroupInvite(SendGroupInviteData data)
         {
             await client.EmitAsync("group-invite", data);
         }
