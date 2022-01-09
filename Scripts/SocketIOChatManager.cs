@@ -18,7 +18,16 @@ namespace SimpleSocketIOChatSDK
         }
 
         public string serviceAddress = "http://localhost:8215";
-        public event Action<SocketIOResponse> onMsg;
+        public string serviceSecretKey = "secret";
+        public event Action<RecvLocalData> onRecvLocal;
+        public event Action<RecvGlobalData> onRecvGlobal;
+        public event Action<RecvWhisperData> onRecvWhisper;
+        public event Action<RecvGroupData> onRecvGroup;
+        public event Action<RecvCreateGroupData> onRecvCreateGroup;
+        public event Action<RecvUpdateGroupData> onRecvUpdateGroup;
+        public event Action<RecvGroupInvitationListData> onRecvGroupInvitationList;
+        public event Action<RecvGroupJoinData> onRecvGroupJoin;
+        public event Action<RecvGroupLeaveData> onRecvGroupLeave;
         private SocketIO client;
 
         private void Awake()
@@ -63,46 +72,55 @@ namespace SimpleSocketIOChatSDK
         private void OnLocal(SocketIOResponse resp)
         {
             RecvLocalData data = resp.GetValue<RecvLocalData>();
+            onRecvLocal.Invoke(data);
         }
 
         private void OnGlobal(SocketIOResponse resp)
         {
             RecvGlobalData data = resp.GetValue<RecvGlobalData>();
+            onRecvGlobal.Invoke(data);
         }
 
         private void OnWhisper(SocketIOResponse resp)
         {
             RecvWhisperData data = resp.GetValue<RecvWhisperData>();
+            onRecvWhisper.Invoke(data);
         }
 
         private void OnGroup(SocketIOResponse resp)
         {
             RecvGroupData data = resp.GetValue<RecvGroupData>();
+            onRecvGroup.Invoke(data);
         }
 
         private void OnCreateGroup(SocketIOResponse resp)
         {
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
+            onRecvCreateGroup.Invoke(data);
         }
 
         private void OnUpdateGroup(SocketIOResponse resp)
         {
             RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
+            onRecvUpdateGroup.Invoke(data);
         }
 
         private void OnGroupInvitationList(SocketIOResponse resp)
         {
             RecvGroupInvitationListData data = resp.GetValue<RecvGroupInvitationListData>();
+            onRecvGroupInvitationList.Invoke(data);
         }
 
         private void OnGroupJoin(SocketIOResponse resp)
         {
             RecvGroupJoinData data = resp.GetValue<RecvGroupJoinData>();
+            onRecvGroupJoin.Invoke(data);
         }
 
         private void OnGroupLeave(SocketIOResponse resp)
         {
             RecvGroupLeaveData data = resp.GetValue<RecvGroupLeaveData>();
+            onRecvGroupLeave.Invoke(data);
         }
 
         public async void SendValidateUser(SendValidateUser data)
