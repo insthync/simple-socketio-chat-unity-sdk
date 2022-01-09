@@ -1,6 +1,8 @@
 using SocketIOClient;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityRestClient;
 
 namespace SimpleSocketIOChatSDK
 {
@@ -19,6 +21,7 @@ namespace SimpleSocketIOChatSDK
 
         public string serviceAddress = "http://localhost:8215";
         public string serviceSecretKey = "secret";
+        public event Action<EntryUserData> onAddUser;
         public event Action<RecvLocalData> onRecvLocal;
         public event Action<RecvGlobalData> onRecvGlobal;
         public event Action<RecvWhisperData> onRecvWhisper;
@@ -67,6 +70,15 @@ namespace SimpleSocketIOChatSDK
             if (client != null && client.Connected)
                 await client.DisconnectAsync();
             client = null;
+        }
+
+        public async void AddUser(string user_id, string name)
+        {
+            Dictionary<string, string> form = new Dictionary<string, string>();
+            RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/add-user"), form, serviceSecretKey);
+            if (result.IsNetworkError || result.IsHttpError)
+                return;
+            onAddUser.Invoke(result.Content);
         }
 
         private void OnLocal(SocketIOResponse resp)
