@@ -1,6 +1,7 @@
 using SocketIOClient;
 using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using UnityEngine;
 using UnityRestClient;
 
@@ -44,14 +45,14 @@ namespace SimpleSocketIOChatSDK
             DontDestroyOnLoad(gameObject);
         }
 
-        private void OnDestroy()
+        private async void OnDestroy()
         {
-            Disconnect();
+            await Disconnect();
         }
 
-        public async void Connect()
+        public async Task Connect()
         {
-            Disconnect();
+            await Disconnect();
             client = new SocketIO(serviceAddress);
             client.On("local", OnLocal);
             client.On("global", OnGlobal);
@@ -65,14 +66,14 @@ namespace SimpleSocketIOChatSDK
             await client.ConnectAsync();
         }
 
-        public async void Disconnect()
+        public async Task Disconnect()
         {
             if (client != null && client.Connected)
                 await client.DisconnectAsync();
             client = null;
         }
 
-        public async void AddUser(string user_id, string name)
+        public async Task AddUser(string user_id, string name)
         {
             Dictionary<string, string> form = new Dictionary<string, string>();
             form.Add(nameof(user_id), user_id);
@@ -137,67 +138,67 @@ namespace SimpleSocketIOChatSDK
             onRecvGroupLeave.Invoke(data);
         }
 
-        public async void SendValidateUser(SendValidateUser data)
+        public async Task SendValidateUser(SendValidateUser data)
         {
             await client.EmitAsync("validate-user", data);
         }
 
-        public async void SendLocal(SendLocalData data)
+        public async Task SendLocal(SendLocalData data)
         {
             await client.EmitAsync("local", data);
         }
 
-        public async void SendGlobal(SendGlobalData data)
+        public async Task SendGlobal(SendGlobalData data)
         {
             await client.EmitAsync("global", data);
         }
 
-        public async void SendWhisper(SendWhisperData data)
+        public async Task SendWhisper(SendWhisperData data)
         {
             await client.EmitAsync("whisper", data);
         }
 
-        public async void SendGroup(SendGroupData data)
+        public async Task SendGroup(SendGroupData data)
         {
             await client.EmitAsync("group", data);
         }
 
-        public async void SendCreateGroup(SendCreateGroupData data)
+        public async Task SendCreateGroup(SendCreateGroupData data)
         {
             await client.EmitAsync("create-group", data);
         }
 
-        public async void SendUpdateGroup(SendUpdateGroupData data)
+        public async Task SendUpdateGroup(SendUpdateGroupData data)
         {
             await client.EmitAsync("update-group", data);
         }
 
-        public async void SendInvitationList()
+        public async Task SendInvitationList()
         {
             await client.EmitAsync("group-invitation-list");
         }
 
-        public async void SendGroupInvite(SendGroupInviteData data)
+        public async Task SendGroupInvite(SendGroupInviteData data)
         {
             await client.EmitAsync("group-invite", data);
         }
 
-        public async void SendGroupInviteAccept(SendGroupInviteAcceptData data)
+        public async Task SendGroupInviteAccept(SendGroupInviteAcceptData data)
         {
             await client.EmitAsync("group-invite-accept", data);
         }
 
-        public async void SendGroupInviteDecline(SendGroupInviteDeclineData data)
+        public async Task SendGroupInviteDecline(SendGroupInviteDeclineData data)
         {
             await client.EmitAsync("group-invite-decline", data);
         }
 
-        public async void SendLeaveGroup(SendLeaveGroupData data)
+        public async Task SendLeaveGroup(SendLeaveGroupData data)
         {
             await client.EmitAsync("leave-group", data);
         }
 
-        public async void SendKickUser(SendKickUserData data)
+        public async Task SendKickUser(SendKickUserData data)
         {
             await client.EmitAsync("kick-user", data);
         }
