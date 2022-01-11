@@ -5,6 +5,6 @@ namespace SimpleSocketIOChatSDK
     [System.Serializable]
     public struct RecvGroupInvitationListData
     {
-        public List<EntryUserGroupInvitationData> list;
+        public List<EntryGroupData> list;
     }
 }

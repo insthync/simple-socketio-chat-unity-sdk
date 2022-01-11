@@ -33,6 +33,9 @@ namespace SimpleSocketIOChatSDK
         public event Action<RecvGroupListData> onRecvGroupList;
         public event Action<RecvGroupJoinData> onRecvGroupJoin;
         public event Action<RecvGroupLeaveData> onRecvGroupLeave;
+        public Dictionary<string, EntryUserData> Users { get; private set; } = new Dictionary<string, EntryUserData>();
+        public Dictionary<string, EntryGroupData> Groups { get; private set; } = new Dictionary<string, EntryGroupData>();
+        public Dictionary<string, EntryGroupData> GroupInvitations { get; private set; } = new Dictionary<string, EntryGroupData>();
         private SocketIO client;
 
         private void Awake()
@@ -65,6 +68,9 @@ namespace SimpleSocketIOChatSDK
             client.On("group-list", OnGroupList);
             client.On("group-join", OnGroupJoin);
             client.On("group-leave", OnGroupLeave);
+            Users.Clear();
+            Groups.Clear();
+            GroupInvitations.Clear();
             await client.ConnectAsync();
         }
 
@@ -84,6 +90,7 @@ namespace SimpleSocketIOChatSDK
             if (result.IsNetworkError || result.IsHttpError)
                 return;
             onAddUser.Invoke(result.Content);
+            Users[result.Content.user_id] = result.Content;
         }
 
         private void OnLocal(SocketIOResponse resp)
@@ -114,24 +121,56 @@ namespace SimpleSocketIOChatSDK
         {
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
             onRecvCreateGroup.Invoke(data);
+            Groups[data.group_id] = new EntryGroupData()
+            {
+                groupId = data.group_id,
+                title = data.title,
+                iconUrl = data.icon_url,
+            };
         }
 
         private void OnUpdateGroup(SocketIOResponse resp)
         {
             RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
             onRecvUpdateGroup.Invoke(data);
+            Groups[data.group_id] = new EntryGroupData()
+            {
+                groupId = data.group_id,
+                title = data.title,
+                iconUrl = data.icon_url,
+            };
         }
 
         private void OnGroupInvitationList(SocketIOResponse resp)
         {
             RecvGroupInvitationListData data = resp.GetValue<RecvGroupInvitationListData>();
             onRecvGroupInvitationList.Invoke(data);
+            GroupInvitations.Clear();
+            foreach (var entry in data.list)
+            {
+                GroupInvitations.Add(entry.groupId, new EntryGroupData()
+                {
+                    groupId = entry.groupId,
+                    title = entry.title,
+                    iconUrl = entry.iconUrl,
+                });
+            }
         }
 
         private void OnGroupList(SocketIOResponse resp)
         {
             RecvGroupListData data = resp.GetValue<RecvGroupListData>();
             onRecvGroupList.Invoke(data);
+            Groups.Clear();
+            foreach (var entry in data.list)
+            {
+                Groups.Add(entry.groupId, new EntryGroupData()
+                {
+                    groupId = entry.groupId,
+                    title = entry.title,
+                    iconUrl = entry.iconUrl,
+                });
+            }
         }
 
         private void OnGroupJoin(SocketIOResponse resp)
