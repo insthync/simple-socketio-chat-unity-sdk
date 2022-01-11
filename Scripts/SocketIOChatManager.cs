@@ -75,6 +75,8 @@ namespace SimpleSocketIOChatSDK
         public async void AddUser(string user_id, string name)
         {
             Dictionary<string, string> form = new Dictionary<string, string>();
+            form.Add(nameof(user_id), user_id);
+            form.Add(nameof(name), name);
             RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/add-user"), form, serviceSecretKey);
             if (result.IsNetworkError || result.IsHttpError)
                 return;
