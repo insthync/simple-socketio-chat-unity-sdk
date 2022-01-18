@@ -89,8 +89,8 @@ namespace SimpleSocketIOChatSDK
             RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/add-user"), form, serviceSecretKey);
             if (result.IsNetworkError || result.IsHttpError)
                 return;
-            onAddUser.Invoke(result.Content);
             Users[result.Content.user_id] = result.Content;
+            onAddUser.Invoke(result.Content);
         }
 
         private void OnLocal(SocketIOResponse resp)
@@ -120,31 +120,30 @@ namespace SimpleSocketIOChatSDK
         private void OnCreateGroup(SocketIOResponse resp)
         {
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
-            onRecvCreateGroup.Invoke(data);
             Groups[data.group_id] = new EntryGroupData()
             {
                 groupId = data.group_id,
                 title = data.title,
                 iconUrl = data.icon_url,
             };
+            onRecvCreateGroup.Invoke(data);
         }
 
         private void OnUpdateGroup(SocketIOResponse resp)
         {
             RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
-            onRecvUpdateGroup.Invoke(data);
             Groups[data.group_id] = new EntryGroupData()
             {
                 groupId = data.group_id,
                 title = data.title,
                 iconUrl = data.icon_url,
             };
+            onRecvUpdateGroup.Invoke(data);
         }
 
         private void OnGroupInvitationList(SocketIOResponse resp)
         {
             RecvGroupInvitationListData data = resp.GetValue<RecvGroupInvitationListData>();
-            onRecvGroupInvitationList.Invoke(data);
             GroupInvitations.Clear();
             foreach (var entry in data.list)
             {
@@ -155,12 +154,12 @@ namespace SimpleSocketIOChatSDK
                     iconUrl = entry.iconUrl,
                 });
             }
+            onRecvGroupInvitationList.Invoke(data);
         }
 
         private void OnGroupList(SocketIOResponse resp)
         {
             RecvGroupListData data = resp.GetValue<RecvGroupListData>();
-            onRecvGroupList.Invoke(data);
             Groups.Clear();
             foreach (var entry in data.list)
             {
@@ -171,6 +170,7 @@ namespace SimpleSocketIOChatSDK
                     iconUrl = entry.iconUrl,
                 });
             }
+            onRecvGroupList.Invoke(data);
         }
 
         private void OnGroupJoin(SocketIOResponse resp)
