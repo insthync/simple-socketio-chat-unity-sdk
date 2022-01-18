@@ -210,6 +210,11 @@ namespace SimpleSocketIOChatSDK
             await client.EmitAsync("group", data);
         }
 
+        public async Task SendGroupList()
+        {
+            await client.EmitAsync("group-list");
+        }
+
         public async Task SendCreateGroup(SendCreateGroupData data)
         {
             await client.EmitAsync("create-group", data);
@@ -220,7 +225,7 @@ namespace SimpleSocketIOChatSDK
             await client.EmitAsync("update-group", data);
         }
 
-        public async Task SendInvitationList()
+        public async Task SendGroupInvitationList()
         {
             await client.EmitAsync("group-invitation-list");
         }
