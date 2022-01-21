@@ -36,6 +36,7 @@ namespace SimpleSocketIOChatSDK
         public Dictionary<string, EntryUserData> Users { get; private set; } = new Dictionary<string, EntryUserData>();
         public Dictionary<string, EntryGroupData> Groups { get; private set; } = new Dictionary<string, EntryGroupData>();
         public Dictionary<string, EntryGroupData> GroupInvitations { get; private set; } = new Dictionary<string, EntryGroupData>();
+        public Dictionary<string, List<string>> GroupUserIds { get; private set; } = new Dictionary<string, List<string>>();
         private SocketIO client;
 
         private void Awake()
