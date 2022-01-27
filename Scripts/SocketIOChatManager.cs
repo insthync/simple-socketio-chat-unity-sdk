@@ -30,12 +30,14 @@ namespace SimpleSocketIOChatSDK
         public event Action<RecvCreateGroupData> onRecvCreateGroup;
         public event Action<RecvUpdateGroupData> onRecvUpdateGroup;
         public event Action<RecvGroupInvitationListData> onRecvGroupInvitationList;
+        public event Action<RecvGroupUserListData> onRecvGroupUserList;
         public event Action<RecvGroupListData> onRecvGroupList;
         public event Action<RecvGroupJoinData> onRecvGroupJoin;
         public event Action<RecvGroupLeaveData> onRecvGroupLeave;
         public Dictionary<string, EntryUserData> Users { get; private set; } = new Dictionary<string, EntryUserData>();
         public Dictionary<string, EntryGroupData> Groups { get; private set; } = new Dictionary<string, EntryGroupData>();
         public Dictionary<string, EntryGroupData> GroupInvitations { get; private set; } = new Dictionary<string, EntryGroupData>();
+        public Dictionary<string, EntryGroupUserData> GroupUsers { get; private set; } = new Dictionary<string, EntryGroupUserData>();
         public Dictionary<string, List<string>> GroupUserIds { get; private set; } = new Dictionary<string, List<string>>();
         private SocketIO client;
 
@@ -66,6 +68,7 @@ namespace SimpleSocketIOChatSDK
             client.On("create-group", OnCreateGroup);
             client.On("update-group", OnUpdateGroup);
             client.On("group-invitation-list", OnGroupInvitationList);
+            client.On("group-user-list", OnGroupUserList);
             client.On("group-list", OnGroupList);
             client.On("group-join", OnGroupJoin);
             client.On("group-leave", OnGroupLeave);
@@ -82,11 +85,12 @@ namespace SimpleSocketIOChatSDK
             client = null;
         }
 
-        public async Task AddUser(string user_id, string name)
+        public async Task AddUser(string user_id, string name, string icon_url)
         {
             Dictionary<string, string> form = new Dictionary<string, string>();
             form.Add(nameof(user_id), user_id);
             form.Add(nameof(name), name);
+            form.Add(nameof(icon_url), icon_url);
             RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/add-user"), form, serviceSecretKey);
             if (result.IsNetworkError || result.IsHttpError)
                 return;
@@ -148,14 +152,20 @@ namespace SimpleSocketIOChatSDK
             GroupInvitations.Clear();
             foreach (var entry in data.list)
             {
-                GroupInvitations.Add(entry.groupId, new EntryGroupData()
-                {
-                    groupId = entry.groupId,
-                    title = entry.title,
-                    iconUrl = entry.iconUrl,
-                });
+                GroupInvitations.Add(entry.groupId, entry);
             }
             onRecvGroupInvitationList.Invoke(data);
+        }
+
+        private void OnGroupUserList(SocketIOResponse resp)
+        {
+            RecvGroupUserListData data = resp.GetValue<RecvGroupUserListData>();
+            GroupUsers.Clear();
+            foreach (var entry in data.list)
+            {
+                GroupUsers.Add(entry.userId, entry);
+            }
+            onRecvGroupUserList.Invoke(data);
         }
 
         private void OnGroupList(SocketIOResponse resp)
@@ -164,12 +174,7 @@ namespace SimpleSocketIOChatSDK
             Groups.Clear();
             foreach (var entry in data.list)
             {
-                Groups.Add(entry.groupId, new EntryGroupData()
-                {
-                    groupId = entry.groupId,
-                    title = entry.title,
-                    iconUrl = entry.iconUrl,
-                });
+                Groups.Add(entry.groupId, entry);
             }
             onRecvGroupList.Invoke(data);
         }
@@ -229,6 +234,11 @@ namespace SimpleSocketIOChatSDK
         public async Task SendGroupInvitationList()
         {
             await client.EmitAsync("group-invitation-list");
+        }
+
+        public async Task SendGroupUserList(SendGroupUserListData data)
+        {
+            await client.EmitAsync("group-user-list", data);
         }
 
         public async Task SendGroupInvite(SendGroupInviteData data)
