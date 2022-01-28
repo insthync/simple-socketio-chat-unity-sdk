@@ -161,9 +161,11 @@ namespace SimpleSocketIOChatSDK
         {
             RecvGroupUserListData data = resp.GetValue<RecvGroupUserListData>();
             GroupUsers.Clear();
+            GroupUserIds[data.groupId] = new List<string>();
             foreach (var entry in data.list)
             {
                 GroupUsers.Add(entry.userId, entry);
+                GroupUserIds[data.groupId].Add(entry.userId);
             }
             onRecvGroupUserList.Invoke(data);
         }
