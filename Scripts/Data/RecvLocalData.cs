@@ -3,7 +3,7 @@ namespace SimpleSocketIOChatSDK
     [System.Serializable]
     public struct RecvLocalData
     {
-        public string user_id;
+        public string userId;
         public string name;
         public string msg;
         public string map;

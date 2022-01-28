@@ -85,16 +85,16 @@ namespace SimpleSocketIOChatSDK
             client = null;
         }
 
-        public async Task AddUser(string user_id, string name, string icon_url)
+        public async Task AddUser(string userId, string name, string iconUrl)
         {
             Dictionary<string, string> form = new Dictionary<string, string>();
-            form.Add(nameof(user_id), user_id);
+            form.Add(nameof(userId), userId);
             form.Add(nameof(name), name);
-            form.Add(nameof(icon_url), icon_url);
+            form.Add(nameof(iconUrl), iconUrl);
             RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/add-user"), form, serviceSecretKey);
             if (result.IsNetworkError || result.IsHttpError)
                 return;
-            Users[result.Content.user_id] = result.Content;
+            Users[result.Content.userId] = result.Content;
             onAddUser.Invoke(result.Content);
         }
 
@@ -125,11 +125,11 @@ namespace SimpleSocketIOChatSDK
         private void OnCreateGroup(SocketIOResponse resp)
         {
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
-            Groups[data.group_id] = new EntryGroupData()
+            Groups[data.groupId] = new EntryGroupData()
             {
-                groupId = data.group_id,
+                groupId = data.groupId,
                 title = data.title,
-                iconUrl = data.icon_url,
+                iconUrl = data.iconUrl,
             };
             onRecvCreateGroup.Invoke(data);
         }
@@ -137,11 +137,11 @@ namespace SimpleSocketIOChatSDK
         private void OnUpdateGroup(SocketIOResponse resp)
         {
             RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
-            Groups[data.group_id] = new EntryGroupData()
+            Groups[data.groupId] = new EntryGroupData()
             {
-                groupId = data.group_id,
+                groupId = data.groupId,
                 title = data.title,
-                iconUrl = data.icon_url,
+                iconUrl = data.iconUrl,
             };
             onRecvUpdateGroup.Invoke(data);
         }

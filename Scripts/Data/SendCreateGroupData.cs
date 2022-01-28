@@ -4,6 +4,6 @@ namespace SimpleSocketIOChatSDK
     public struct SendCreateGroupData
     {
         public string title;
-        public string icon_url;
+        public string iconUrl;
     }
 }

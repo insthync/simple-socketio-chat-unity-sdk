@@ -3,7 +3,7 @@
     [System.Serializable]
     public struct EntryUserData
     {
-        public string user_id;
+        public string userId;
         public string name;
         public string connectionKey;
     }

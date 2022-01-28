@@ -3,8 +3,8 @@ namespace SimpleSocketIOChatSDK
     [System.Serializable]
     public struct RecvUpdateGroupData
     {
-        public string group_id;
+        public string groupId;
         public string title;
-        public string icon_url;
+        public string iconUrl;
     }
 }
