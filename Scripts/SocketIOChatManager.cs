@@ -213,6 +213,11 @@ namespace SimpleSocketIOChatSDK
             await client.EmitAsync("whisper", data);
         }
 
+        public async Task SendWhisperById(SendWhisperByIdData data)
+        {
+            await client.EmitAsync("whisper-by-id", data);
+        }
+
         public async Task SendGroup(SendGroupData data)
         {
             await client.EmitAsync("group", data);
