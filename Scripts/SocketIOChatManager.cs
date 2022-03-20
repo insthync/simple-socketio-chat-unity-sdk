@@ -23,6 +23,7 @@ namespace SimpleSocketIOChatSDK
         public string serviceAddress = "http://localhost:8215";
         public string serviceSecretKey = "secret";
         public event Action<EntryUserData> onAddUser;
+        public event Action<string> onRemoveUser;
         public event Action<RecvLocalData> onRecvLocal;
         public event Action<RecvGlobalData> onRecvGlobal;
         public event Action<RecvWhisperData> onRecvWhisper;
@@ -96,6 +97,17 @@ namespace SimpleSocketIOChatSDK
                 return;
             Users[result.Content.userId] = result.Content;
             onAddUser.Invoke(result.Content);
+        }
+
+        public async Task RemoveUser(string userId)
+        {
+            Dictionary<string, string> form = new Dictionary<string, string>();
+            form.Add(nameof(userId), userId);
+            RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/remove-user"), form, serviceSecretKey);
+            if (result.IsNetworkError || result.IsHttpError)
+                return;
+            Users.Remove(userId);
+            onRemoveUser.Invoke(userId);
         }
 
         private void OnLocal(SocketIOResponse resp)
