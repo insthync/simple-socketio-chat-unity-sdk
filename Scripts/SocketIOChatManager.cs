@@ -14,8 +14,6 @@ namespace SimpleSocketIOChatSDK
         {
             get
             {
-                if (!instance)
-                    new GameObject("_SocketIOChatManager").AddComponent<SocketIOChatManager>();
                 return instance;
             }
         }
