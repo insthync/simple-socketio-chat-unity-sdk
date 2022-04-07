@@ -1,6 +1,8 @@
+using Cysharp.Threading.Tasks;
 using SocketIOClient;
 using System;
 using System.Collections.Generic;
+using System.Net;
 using System.Threading.Tasks;
 using UnityEngine;
 using UnityRestClient;
@@ -59,7 +61,10 @@ namespace SimpleSocketIOChatSDK
         public async Task Connect()
         {
             await Disconnect();
-            client = new SocketIO(serviceAddress);
+            client = new SocketIO(serviceAddress, new SocketIOOptions()
+            {
+                Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+            });
             client.On("local", OnLocal);
             client.On("global", OnGlobal);
             client.On("whisper", OnWhisper);
@@ -74,13 +79,17 @@ namespace SimpleSocketIOChatSDK
             Users.Clear();
             Groups.Clear();
             GroupInvitations.Clear();
+            // Always accept SSL
+            ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, policyErrors) => true;
             await client.ConnectAsync();
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task Disconnect()
         {
             if (client != null && client.Connected)
                 await client.DisconnectAsync();
+            await UniTask.SwitchToMainThread();
             client = null;
         }
 
@@ -108,32 +117,37 @@ namespace SimpleSocketIOChatSDK
             onRemoveUser.Invoke(userId);
         }
 
-        private void OnLocal(SocketIOResponse resp)
+        private async void OnLocal(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvLocalData data = resp.GetValue<RecvLocalData>();
             onRecvLocal.Invoke(data);
         }
 
-        private void OnGlobal(SocketIOResponse resp)
+        private async void OnGlobal(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGlobalData data = resp.GetValue<RecvGlobalData>();
             onRecvGlobal.Invoke(data);
         }
 
-        private void OnWhisper(SocketIOResponse resp)
+        private async void OnWhisper(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvWhisperData data = resp.GetValue<RecvWhisperData>();
             onRecvWhisper.Invoke(data);
         }
 
-        private void OnGroup(SocketIOResponse resp)
+        private async void OnGroup(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupData data = resp.GetValue<RecvGroupData>();
             onRecvGroup.Invoke(data);
         }
 
-        private void OnCreateGroup(SocketIOResponse resp)
+        private async void OnCreateGroup(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvCreateGroupData data = resp.GetValue<RecvCreateGroupData>();
             Groups[data.groupId] = new EntryGroupData()
             {
@@ -144,8 +158,9 @@ namespace SimpleSocketIOChatSDK
             onRecvCreateGroup.Invoke(data);
         }
 
-        private void OnUpdateGroup(SocketIOResponse resp)
+        private async void OnUpdateGroup(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvUpdateGroupData data = resp.GetValue<RecvUpdateGroupData>();
             Groups[data.groupId] = new EntryGroupData()
             {
@@ -156,8 +171,9 @@ namespace SimpleSocketIOChatSDK
             onRecvUpdateGroup.Invoke(data);
         }
 
-        private void OnGroupInvitationList(SocketIOResponse resp)
+        private async void OnGroupInvitationList(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupInvitationListData data = resp.GetValue<RecvGroupInvitationListData>();
             GroupInvitations.Clear();
             foreach (var entry in data.list)
@@ -167,8 +183,9 @@ namespace SimpleSocketIOChatSDK
             onRecvGroupInvitationList.Invoke(data);
         }
 
-        private void OnGroupUserList(SocketIOResponse resp)
+        private async void OnGroupUserList(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupUserListData data = resp.GetValue<RecvGroupUserListData>();
             GroupUsers.Clear();
             GroupUserIds[data.groupId] = new List<string>();
@@ -180,8 +197,9 @@ namespace SimpleSocketIOChatSDK
             onRecvGroupUserList.Invoke(data);
         }
 
-        private void OnGroupList(SocketIOResponse resp)
+        private async void OnGroupList(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupListData data = resp.GetValue<RecvGroupListData>();
             Groups.Clear();
             foreach (var entry in data.list)
@@ -191,14 +209,16 @@ namespace SimpleSocketIOChatSDK
             onRecvGroupList.Invoke(data);
         }
 
-        private void OnGroupJoin(SocketIOResponse resp)
+        private async void OnGroupJoin(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupJoinData data = resp.GetValue<RecvGroupJoinData>();
             onRecvGroupJoin.Invoke(data);
         }
 
-        private void OnGroupLeave(SocketIOResponse resp)
+        private async void OnGroupLeave(SocketIOResponse resp)
         {
+            await UniTask.SwitchToMainThread();
             RecvGroupLeaveData data = resp.GetValue<RecvGroupLeaveData>();
             onRecvGroupLeave.Invoke(data);
         }
@@ -206,81 +226,97 @@ namespace SimpleSocketIOChatSDK
         public async Task SendValidateUser(SendValidateUser data)
         {
             await client.EmitAsync("validate-user", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendLocal(SendLocalData data)
         {
             await client.EmitAsync("local", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGlobal(SendGlobalData data)
         {
             await client.EmitAsync("global", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendWhisper(SendWhisperData data)
         {
             await client.EmitAsync("whisper", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendWhisperById(SendWhisperByIdData data)
         {
             await client.EmitAsync("whisper-by-id", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroup(SendGroupData data)
         {
             await client.EmitAsync("group", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupList()
         {
             await client.EmitAsync("group-list");
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendCreateGroup(SendCreateGroupData data)
         {
             await client.EmitAsync("create-group", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendUpdateGroup(SendUpdateGroupData data)
         {
             await client.EmitAsync("update-group", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupInvitationList()
         {
             await client.EmitAsync("group-invitation-list");
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupUserList(SendGroupUserListData data)
         {
             await client.EmitAsync("group-user-list", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupInvite(SendGroupInviteData data)
         {
             await client.EmitAsync("group-invite", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupInviteAccept(SendGroupInviteAcceptData data)
         {
             await client.EmitAsync("group-invite-accept", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendGroupInviteDecline(SendGroupInviteDeclineData data)
         {
             await client.EmitAsync("group-invite-decline", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendLeaveGroup(SendLeaveGroupData data)
         {
             await client.EmitAsync("leave-group", data);
+            await UniTask.SwitchToMainThread();
         }
 
         public async Task SendKickUser(SendKickUserData data)
         {
             await client.EmitAsync("kick-user", data);
+            await UniTask.SwitchToMainThread();
         }
     }
 }

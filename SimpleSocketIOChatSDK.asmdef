@@ -2,7 +2,8 @@
     "name": "SimpleSocketIOChatSDK",
     "rootNamespace": "",
     "references": [
-        "GUID:d831e907420eb7d4b82b4ebeddff3030"
+        "GUID:d831e907420eb7d4b82b4ebeddff3030",
+        "GUID:f51ebe6a0ceec4240a699833d6309b23"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
