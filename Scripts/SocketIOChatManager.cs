@@ -110,7 +110,7 @@ namespace SimpleSocketIOChatSDK
         {
             Dictionary<string, string> form = new Dictionary<string, string>();
             form.Add(nameof(userId), userId);
-            RestClient.Result<EntryUserData> result = await RestClient.Post<Dictionary<string, string>, EntryUserData>(RestClient.GetUrl(serviceAddress, "/remove-user"), form, serviceSecretKey);
+            RestClient.Result result = await RestClient.Post(RestClient.GetUrl(serviceAddress, "/remove-user"), form, serviceSecretKey);
             if (result.IsNetworkError || result.IsHttpError)
                 return;
             Users.Remove(userId);
