@@ -103,7 +103,8 @@ namespace SimpleSocketIOChatSDK
             if (result.IsNetworkError || result.IsHttpError)
                 return;
             Users[result.Content.userId] = result.Content;
-            onAddUser.Invoke(result.Content);
+            if (onAddUser != null)
+                onAddUser.Invoke(result.Content);
         }
 
         public async Task RemoveUser(string userId)
@@ -114,35 +115,40 @@ namespace SimpleSocketIOChatSDK
             if (result.IsNetworkError || result.IsHttpError)
                 return;
             Users.Remove(userId);
-            onRemoveUser.Invoke(userId);
+            if (onRemoveUser != null)
+                onRemoveUser.Invoke(userId);
         }
 
         private async void OnLocal(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvLocalData data = resp.GetValue<RecvLocalData>();
-            onRecvLocal.Invoke(data);
+            if (onRecvLocal != null)
+                onRecvLocal.Invoke(data);
         }
 
         private async void OnGlobal(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvGlobalData data = resp.GetValue<RecvGlobalData>();
-            onRecvGlobal.Invoke(data);
+            if (onRecvGlobal != null)
+                onRecvGlobal.Invoke(data);
         }
 
         private async void OnWhisper(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvWhisperData data = resp.GetValue<RecvWhisperData>();
-            onRecvWhisper.Invoke(data);
+            if (onRecvWhisper != null)
+                onRecvWhisper.Invoke(data);
         }
 
         private async void OnGroup(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvGroupData data = resp.GetValue<RecvGroupData>();
-            onRecvGroup.Invoke(data);
+            if (onRecvGroup != null)
+                onRecvGroup.Invoke(data);
         }
 
         private async void OnCreateGroup(SocketIOResponse resp)
@@ -155,7 +161,8 @@ namespace SimpleSocketIOChatSDK
                 title = data.title,
                 iconUrl = data.iconUrl,
             };
-            onRecvCreateGroup.Invoke(data);
+            if (onRecvCreateGroup != null)
+                onRecvCreateGroup.Invoke(data);
         }
 
         private async void OnUpdateGroup(SocketIOResponse resp)
@@ -168,7 +175,8 @@ namespace SimpleSocketIOChatSDK
                 title = data.title,
                 iconUrl = data.iconUrl,
             };
-            onRecvUpdateGroup.Invoke(data);
+            if (onRecvUpdateGroup != null)
+                onRecvUpdateGroup.Invoke(data);
         }
 
         private async void OnGroupInvitationList(SocketIOResponse resp)
@@ -180,7 +188,8 @@ namespace SimpleSocketIOChatSDK
             {
                 GroupInvitations.Add(entry.groupId, entry);
             }
-            onRecvGroupInvitationList.Invoke(data);
+            if (onRecvGroupInvitationList != null)
+                onRecvGroupInvitationList.Invoke(data);
         }
 
         private async void OnGroupUserList(SocketIOResponse resp)
@@ -194,7 +203,8 @@ namespace SimpleSocketIOChatSDK
                 GroupUsers.Add(entry.userId, entry);
                 GroupUserIds[data.groupId].Add(entry.userId);
             }
-            onRecvGroupUserList.Invoke(data);
+            if (onRecvGroupUserList != null)
+                onRecvGroupUserList.Invoke(data);
         }
 
         private async void OnGroupList(SocketIOResponse resp)
@@ -206,21 +216,24 @@ namespace SimpleSocketIOChatSDK
             {
                 Groups.Add(entry.groupId, entry);
             }
-            onRecvGroupList.Invoke(data);
+            if (onRecvGroupList != null)
+                onRecvGroupList.Invoke(data);
         }
 
         private async void OnGroupJoin(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvGroupJoinData data = resp.GetValue<RecvGroupJoinData>();
-            onRecvGroupJoin.Invoke(data);
+            if (onRecvGroupJoin != null)
+                onRecvGroupJoin.Invoke(data);
         }
 
         private async void OnGroupLeave(SocketIOResponse resp)
         {
             await UniTask.SwitchToMainThread();
             RecvGroupLeaveData data = resp.GetValue<RecvGroupLeaveData>();
-            onRecvGroupLeave.Invoke(data);
+            if (onRecvGroupLeave != null)
+                onRecvGroupLeave.Invoke(data);
         }
 
         public async Task SendValidateUser(SendValidateUser data)
