@@ -44,13 +44,14 @@ namespace SimpleSocketIOChatSDK
 
         private void Awake()
         {
-            if (instance)
+            if (instance != null)
             {
                 Destroy(gameObject);
                 return;
             }
             instance = this;
             DontDestroyOnLoad(gameObject);
+            Debug.Log("[" + nameof(SocketIOChatManager) + "] Connecting to " + serviceAddress);
         }
 
         private async void OnDestroy()
@@ -61,6 +62,8 @@ namespace SimpleSocketIOChatSDK
         public async Task Connect()
         {
             await Disconnect();
+            await UniTask.SwitchToMainThread();
+            Debug.Log("[" + nameof(SocketIOChatManager) + "] Connecting to " + serviceAddress);
             client = new SocketIO(serviceAddress, new SocketIOOptions()
             {
                 Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
@@ -83,13 +86,16 @@ namespace SimpleSocketIOChatSDK
             ServicePointManager.ServerCertificateValidationCallback = (sender, certificate, chain, policyErrors) => true;
             await client.ConnectAsync();
             await UniTask.SwitchToMainThread();
+            Debug.Log("[" + nameof(SocketIOChatManager) + "] Connected to " + serviceAddress);
         }
 
         public async Task Disconnect()
         {
+            Debug.Log("[" + nameof(SocketIOChatManager) + "] Disconnecting");
             if (client != null && client.Connected)
                 await client.DisconnectAsync();
             await UniTask.SwitchToMainThread();
+            Debug.Log("[" + nameof(SocketIOChatManager) + "] Disconnected");
             client = null;
         }
 
