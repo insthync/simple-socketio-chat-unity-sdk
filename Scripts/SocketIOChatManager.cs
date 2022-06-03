@@ -245,7 +245,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendValidateUser(SendValidateUser data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("validate-user", data);
             await UniTask.SwitchToMainThread();
@@ -253,7 +253,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendLocal(SendLocalData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("local", data);
             await UniTask.SwitchToMainThread();
@@ -261,7 +261,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGlobal(SendGlobalData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("global", data);
             await UniTask.SwitchToMainThread();
@@ -269,7 +269,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendWhisper(SendWhisperData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("whisper", data);
             await UniTask.SwitchToMainThread();
@@ -277,7 +277,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendWhisperById(SendWhisperByIdData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("whisper-by-id", data);
             await UniTask.SwitchToMainThread();
@@ -285,7 +285,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroup(SendGroupData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group", data);
             await UniTask.SwitchToMainThread();
@@ -293,7 +293,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupList()
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-list");
             await UniTask.SwitchToMainThread();
@@ -301,7 +301,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendCreateGroup(SendCreateGroupData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("create-group", data);
             await UniTask.SwitchToMainThread();
@@ -309,7 +309,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendUpdateGroup(SendUpdateGroupData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("update-group", data);
             await UniTask.SwitchToMainThread();
@@ -317,7 +317,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupInvitationList()
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-invitation-list");
             await UniTask.SwitchToMainThread();
@@ -325,7 +325,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupUserList(SendGroupUserListData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-user-list", data);
             await UniTask.SwitchToMainThread();
@@ -333,7 +333,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupInvite(SendGroupInviteData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-invite", data);
             await UniTask.SwitchToMainThread();
@@ -341,7 +341,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupInviteAccept(SendGroupInviteAcceptData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-invite-accept", data);
             await UniTask.SwitchToMainThread();
@@ -349,7 +349,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendGroupInviteDecline(SendGroupInviteDeclineData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("group-invite-decline", data);
             await UniTask.SwitchToMainThread();
@@ -357,7 +357,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendLeaveGroup(SendLeaveGroupData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("leave-group", data);
             await UniTask.SwitchToMainThread();
@@ -365,7 +365,7 @@ namespace SimpleSocketIOChatSDK
 
         public async Task SendKickUser(SendKickUserData data)
         {
-            if (autoConnectWhenSend && (client == null || !client.Connected))
+            if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
             await client.EmitAsync("kick-user", data);
             await UniTask.SwitchToMainThread();
