@@ -19,7 +19,7 @@ namespace SimpleSocketIOChatSDK
                 return instance;
             }
         }
-
+        public SocketIOClient.Transport.TransportProtocol protocal = SocketIOClient.Transport.TransportProtocol.Polling;
         public string serviceAddress = "http://localhost:8215";
         public string serviceSecretKey = "secret";
         public bool autoConnectWhenSend = true;
@@ -67,7 +67,7 @@ namespace SimpleSocketIOChatSDK
             Debug.Log("[" + nameof(SocketIOChatManager) + "] Connecting to " + serviceAddress);
             client = new SocketIO(serviceAddress, new SocketIOOptions()
             {
-                Transport = SocketIOClient.Transport.TransportProtocol.WebSocket,
+                Transport = protocal,
             });
             client.On("local", OnLocal);
             client.On("global", OnGlobal);
