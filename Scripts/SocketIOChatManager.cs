@@ -247,7 +247,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("validate-user", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send validate user");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("validate-user", data);
+            }
+            catch
+            {
+                client = null;
+                await SendValidateUser(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -255,7 +268,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("local", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send local chat");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("local", data);
+            }
+            catch
+            {
+                client = null;
+                await SendLocal(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -263,7 +289,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("global", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send global chat");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("global", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGlobal(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -271,7 +310,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("whisper", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send whisper chat");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("whisper", data);
+            }
+            catch
+            {
+                client = null;
+                await SendWhisper(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -279,7 +331,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("whisper-by-id", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send whisper chat by ID");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("whisper-by-id", data);
+            }
+            catch
+            {
+                client = null;
+                await SendWhisperById(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -287,7 +352,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group chat");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGroup(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -295,7 +373,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-list");
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group list request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-list");
+            }
+            catch
+            {
+                client = null;
+                await SendGroupList();
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -303,7 +394,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("create-group", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send create group request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("create-group", data);
+            }
+            catch
+            {
+                client = null;
+                await SendCreateGroup(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -311,7 +415,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("update-group", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send update group request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("update-group", data);
+            }
+            catch
+            {
+                client = null;
+                await SendUpdateGroup(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -319,7 +436,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-invitation-list");
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group invitation list request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-invitation-list");
+            }
+            catch
+            {
+                client = null;
+                await SendGroupInvitationList();
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -327,7 +457,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-user-list", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group user list request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-user-list", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGroupUserList(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -335,7 +478,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-invite", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group invite request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-invite", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGroupInvite(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -343,7 +499,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-invite-accept", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group invite accept request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-invite-accept", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGroupInviteAccept(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -351,7 +520,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("group-invite-decline", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send group invite decline request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("group-invite-decline", data);
+            }
+            catch
+            {
+                client = null;
+                await SendGroupInviteDecline(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -359,7 +541,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("leave-group", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send leave group request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("leave-group", data);
+            }
+            catch
+            {
+                client = null;
+                await SendLeaveGroup(data);
+            }
             await UniTask.SwitchToMainThread();
         }
 
@@ -367,7 +562,20 @@ namespace SimpleSocketIOChatSDK
         {
             if (autoConnectWhenSend && (client == null || client.Disconnected))
                 await Connect();
-            await client.EmitAsync("kick-user", data);
+            if (client == null || client.Disconnected)
+            {
+                Debug.LogError($"[{nameof(SocketIOChatManager)}] Didn't connected to server yet, so it can't send kick user request");
+                return;
+            }
+            try
+            {
+                await client.EmitAsync("kick-user", data);
+            }
+            catch
+            {
+                client = null;
+                await SendKickUser(data);
+            }
             await UniTask.SwitchToMainThread();
         }
     }
